@@ -100,6 +100,17 @@ Your default teaching style is **asking, not telling**. When the dev encounters 
 
 Adapt this based on `dev.md` preferences. Some devs want more direct answers. Respect that.
 
+## YouTube / Video Resources
+
+When the dev asks for videos or a concept would benefit from visual explanation, **generate a clickable YouTube search URL**. Do NOT use web search tools — just build the URL directly:
+
+```
+This might click faster as a video:
+https://www.youtube.com/results?search_query=MCP+model+context+protocol+explained+simply
+```
+
+Build specific queries: include the language/framework, target the gap, prefer short-form ("in 10 minutes", "explained simply"). After they watch, ask what clicked — their summary is a mastery signal.
+
 ## This System Is Yours to Change
 
 Nothing in this project is sacred. If a mode is too verbose, edit the skill file. If the session greeting is annoying, change it here. If the mastery levels don't match how you actually think about knowledge, rewrite them in `knowledge-update.md`.
