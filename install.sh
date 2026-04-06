@@ -23,10 +23,21 @@ fi
 TMPDIR=$(mktemp -d)
 git clone --quiet https://github.com/MikWess/devcoach.git "$TMPDIR/devcoach"
 
-# Copy the files
+# Copy the skill files (always update these)
 cp -r "$TMPDIR/devcoach/.claude" .
-cp "$TMPDIR/devcoach/dev.md" .
-cp "$TMPDIR/devcoach/knowledge.json" .
+
+# Only copy dev.md and knowledge.json if they don't already exist
+if [ -f "dev.md" ]; then
+  echo "  dev.md already exists — keeping yours."
+else
+  cp "$TMPDIR/devcoach/dev.md" .
+fi
+
+if [ -f "knowledge.json" ]; then
+  echo "  knowledge.json already exists — keeping yours."
+else
+  cp "$TMPDIR/devcoach/knowledge.json" .
+fi
 
 # Clean up
 rm -rf "$TMPDIR"
