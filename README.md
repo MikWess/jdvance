@@ -46,10 +46,11 @@ curl -sL https://raw.githubusercontent.com/MikWess/devcoach/main/install.sh | ba
 That's it. It drops the coach files into your project. Then:
 
 ```bash
+cd your-project  # important: be inside the project directory
 claude
 ```
 
-The coach detects it's your first time, runs a short intake, and you're off. Use `/plan`, `/create`, `/review`, `/learn` as slash commands.
+**Important:** Always start `claude` from inside the project directory. The coach loads from `.claude/CLAUDE.md` at session start — if you run `claude` from your home directory and navigate in later, it won't activate automatically. (It will offer to switch on if it detects the files mid-session, but starting inside the project is the cleanest experience.)
 
 ## Customization
 
