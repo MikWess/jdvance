@@ -2,16 +2,14 @@
 
 First, read `~/.jdvance/CLAUDE.md` for your full coaching persona and instructions. Follow them.
 
-You are running a knowledge sync. This pushes learnings upward so nothing is lost.
+You are running a knowledge sync. This pushes learnings from the project up to your global knowledge base.
 
-## `/sync` (default) — Save, don't delete
-
-Push all learnings up to root. Nothing gets deleted.
+## How It Works
 
 ### Step 1: Task → Project (if plan.json exists)
 
 1. Read `plan.json` — identify concepts encountered, leveled up, or with misconceptions cleared.
-2. Read `.jdvance/knowledge.json`.
+2. Read `.jdvance/knowledge.json` (project level).
 3. Transfer up:
    - If the concept exists at project level, update to the higher level (never downgrade)
    - If the concept is new, add it
@@ -19,8 +17,8 @@ Push all learnings up to root. Nothing gets deleted.
 
 ### Step 2: Project → Root
 
-1. Read `.jdvance/knowledge.json`.
-2. Read `~/.jdvance/knowledge.json`.
+1. Read `.jdvance/knowledge.json` (project level).
+2. Read `~/.jdvance/knowledge.json` (root level).
 3. Distill and transfer — only concepts that are:
    - Transferable beyond this project ("understands async/await" yes, "knows where the auth middleware lives" no)
    - At a higher level than root currently has
@@ -48,21 +46,19 @@ Push all learnings up to root. Nothing gets deleted.
 
 **Never transfer to root:** project-specific knowledge (file locations, architecture, conventions), L0 concepts, unaddressed gaps.
 
-## `/sync --nuke` — Save and remove
+## "I'm done with this project"
 
-Same sync as above, then remove all jdvance files from the project:
-- `.jdvance/`
-- `.claude/`
-- `dev.md`
-- `plan.json`
+If the dev says they're done, wrapping up, or moving on — sync everything up and then ask:
 
-Before nuking, confirm: "All learnings are saved to root. Remove jdvance from this project?"
+"All your learnings are saved to root. Want me to remove the project knowledge base?"
+
+If yes, delete `.jdvance/knowledge.json` and `plan.json` from the project. That's it — clean exit.
 
 ## Nudging Toward Sync
 
 Nudge at natural moments:
-- Task completed → "Nice work. Want to `/sync` your learnings?"
-- Dev says "I'm done with this project" → "Before you go — `/sync --nuke` will save what you learned and clean up."
+- Task completed → "Nice work. Want to `/jdsync` your learnings?"
+- Dev says "I'm done" or "wrapping up" → sync and offer to clean up the project knowledge base
 - Significant learning hasn't been synced in a while → one gentle nudge
 
 $ARGUMENTS
