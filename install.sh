@@ -1,5 +1,5 @@
 #!/bin/bash
-# jdvance installer — run from inside your project directory
+# jdvance installer
 # Usage: curl -sL https://raw.githubusercontent.com/MikWess/jdvance/main/install.sh | bash
 
 set -e
@@ -15,71 +15,27 @@ echo ""
 echo -e "${ORANGE}${BOLD}  J.D. VANCE${RESET}"
 echo -e "${DIM}  Junior Dev — Driven Via Agentic Native Claude Education${RESET}"
 echo ""
-echo -e "  Installing into ${BOLD}$(pwd)${RESET}..."
+echo -e "  Installing globally..."
 echo ""
 
 # Clone to temp dir
 TMPDIR=$(mktemp -d)
 git clone --quiet https://github.com/MikWess/jdvance.git "$TMPDIR/jdvance"
 
-# Copy project files into .jdvance/
-if [ -d ".jdvance" ]; then
-  echo -e "  ${ORANGE}Warning:${RESET} .jdvance/ already exists. Updating..."
-fi
-mkdir -p .jdvance/commands .jdvance/skills
-cp "$TMPDIR/jdvance/.jdvance/CLAUDE.md" .jdvance/CLAUDE.md
-cp "$TMPDIR/jdvance/.jdvance/commands/"*.md .jdvance/commands/
-cp "$TMPDIR/jdvance/.jdvance/skills/"*.md .jdvance/skills/
-# Only copy knowledge.json if it doesn't exist (preserve existing)
-if [ ! -f ".jdvance/knowledge.json" ]; then
-  cp "$TMPDIR/jdvance/.jdvance/knowledge.json" .jdvance/knowledge.json
-fi
-cp "$TMPDIR/jdvance/dev.md" .
-echo -e "  ${GREEN}+${RESET} Installed .jdvance/ (coach, modes, knowledge store)"
-
-# Install global /jdvance command
+# Install commands to ~/.claude/commands/
 mkdir -p "$HOME/.claude/commands"
-cp "$TMPDIR/jdvance/jdvance-command.md" "$HOME/.claude/commands/jdvance.md"
-echo -e "  ${GREEN}+${RESET} Installed /jdvance command globally"
+cp "$TMPDIR/jdvance/commands/"*.md "$HOME/.claude/commands/"
+echo -e "  ${GREEN}+${RESET} Installed slash commands: /jdvance /jdplan /jdcreate /jdreview /jdlearn /jdsync"
 
-# Ask about gitignore
-echo ""
-echo -e "  ${ORANGE}${BOLD}Add jdvance to .gitignore?${RESET} ${DIM}(recommended — keeps coach files out of commits)${RESET}"
-echo ""
-read -p "  Add to .gitignore? (Y/n) " -n 1 -r </dev/tty
-echo ""
-if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-  IGNORE_ENTRIES=(".jdvance/" "dev.md" "plan.json")
-  if [ -f ".gitignore" ]; then
-    for entry in "${IGNORE_ENTRIES[@]}"; do
-      grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
-    done
-  else
-    printf '%s\n' "${IGNORE_ENTRIES[@]}" > .gitignore
-  fi
-  echo -e "  ${GREEN}+${RESET} Added .jdvance/, dev.md, and plan.json to .gitignore"
-else
-  echo -e "  ${DIM}Skipped. jdvance files will be visible to git.${RESET}"
-fi
+# Install persona, skills, and knowledge to ~/.jdvance/
+mkdir -p "$HOME/.jdvance/skills"
+cp "$TMPDIR/jdvance/.jdvance/CLAUDE.md" "$HOME/.jdvance/CLAUDE.md"
+cp "$TMPDIR/jdvance/.jdvance/skills/"*.md "$HOME/.jdvance/skills/"
+cp "$TMPDIR/jdvance/dev.md" "$HOME/.jdvance/dev.md"
 
-# Ask about global knowledge store
+# Only create knowledge.json if it doesn't exist (preserve existing)
 if [ ! -f "$HOME/.jdvance/knowledge.json" ]; then
-  echo ""
-  echo -e "  ${ORANGE}${BOLD}Want jdvance to remember you across projects?${RESET}"
-  echo ""
-  echo -e "  This creates a small folder at ${BOLD}$HOME/.jdvance/${RESET} containing:"
-  echo -e "    ${DIM}-${RESET} knowledge.json  ${DIM}(your concept mastery, starts empty)${RESET}"
-  echo -e "    ${DIM}-${RESET} dashboard.html  ${DIM}(visualize your progress)${RESET}"
-  echo -e "    ${DIM}-${RESET} jdvance CLI     ${DIM}(open dashboard from anywhere)${RESET}"
-  echo ""
-  echo -e "  When you ${BOLD}/sync${RESET}, learnings transfer here so you never start from zero."
-  echo -e "  ${DIM}To remove later: rm -rf ~/.jdvance${RESET}"
-  echo ""
-  read -p "  Set up global knowledge store? (y/n) " -n 1 -r </dev/tty
-  echo ""
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    mkdir -p "$HOME/.jdvance"
-    cat > "$HOME/.jdvance/knowledge.json" << 'ENDJSON'
+  cat > "$HOME/.jdvance/knowledge.json" << 'ENDJSON'
 {
   "dev_profile": {
     "name": "",
@@ -91,32 +47,25 @@ if [ ! -f "$HOME/.jdvance/knowledge.json" ]; then
   "gaps": []
 }
 ENDJSON
-    echo -e "  ${GREEN}+${RESET} Created ~/.jdvance/knowledge.json"
-    # Copy dashboard and CLI
-    cp "$TMPDIR/jdvance/dashboard.html" "$HOME/.jdvance/dashboard.html"
-    cp "$TMPDIR/jdvance/jdvance" "$HOME/.jdvance/jdvance"
-    chmod +x "$HOME/.jdvance/jdvance"
-    echo -e "  ${GREEN}+${RESET} Installed dashboard and CLI to ~/.jdvance/"
-    echo ""
-    echo -e "  Open your dashboard anytime: ${BOLD}~/.jdvance/jdvance dashboard${RESET}"
-  else
-    echo -e "  ${DIM}Skipped. You can set this up later by running the installer again.${RESET}"
-  fi
+  echo -e "  ${GREEN}+${RESET} Created ~/.jdvance/knowledge.json"
 else
-  echo -e "  ${GREEN}+${RESET} Global knowledge store found at ~/.jdvance/"
+  echo -e "  ${GREEN}+${RESET} Kept existing ~/.jdvance/knowledge.json"
 fi
+
+echo -e "  ${GREEN}+${RESET} Installed coach persona and skills to ~/.jdvance/"
 
 # Clean up temp
 rm -rf "$TMPDIR"
 
 echo ""
-echo -e "  ${GREEN}${BOLD}You're set.${RESET} Here's what you have:"
+echo -e "  ${GREEN}${BOLD}You're set.${RESET}"
 echo ""
-echo -e "  ${ORANGE}.jdvance/${RESET}        coach persona, modes, knowledge store"
-echo -e "  ${ORANGE}dev.md${RESET}           your preferences ${DIM}(edit this)${RESET}"
+echo -e "  Type ${BOLD}/jdvance${RESET} in any Claude Code session to activate the coach."
+echo -e "  Commands: ${BOLD}/jdplan${RESET}  ${BOLD}/jdcreate${RESET}  ${BOLD}/jdreview${RESET}  ${BOLD}/jdlearn${RESET}  ${BOLD}/jdsync${RESET}"
 echo ""
-echo -e "  Type ${BOLD}/jdvance${RESET} in Claude Code to activate the coach."
-echo -e "  Then just say: ${BOLD}plan${RESET}  ${BOLD}create${RESET}  ${BOLD}review${RESET}  ${BOLD}learn${RESET}  ${BOLD}sync${RESET}"
+echo -e "  When you activate in a project, the coach will ask if you want"
+echo -e "  a temporary project-level knowledge base. That's the only file"
+echo -e "  that touches your project — and you delete it when you're done."
 echo ""
 echo -e "  ${DIM}If this helps you, star the repo so others can find it:${RESET}"
 echo -e "  ${ORANGE}https://github.com/MikWess/jdvance${RESET}"

@@ -1,4 +1,6 @@
-# /sync — Save Your Learnings
+# /jdsync — Save Your Learnings
+
+First, read `~/.jdvance/CLAUDE.md` for your full coaching persona and instructions. Follow them.
 
 You are running a knowledge sync. This pushes learnings upward so nothing is lost.
 

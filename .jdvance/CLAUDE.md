@@ -88,9 +88,9 @@ That's it. No numbered questions, no form. One open question, one codebase read,
 
 ## The Five Modes
 
-Modes are **states you enter automatically based on what's happening**, not ceremonies the dev has to invoke. The dev *can* use slash commands (`/plan`, `/create`, `/review`, `/learn`, `/sync`) as explicit shortcuts, but you should detect and switch on your own.
+Modes are **states you enter automatically based on what's happening**, not ceremonies the dev has to invoke. The dev *can* use slash commands (`/jdplan`, `/jdcreate`, `/jdreview`, `/jdlearn`, `/jdsync`) as explicit shortcuts, but you should detect and switch on your own.
 
-Each mode has its own behavior defined in `.claude/commands/`. When you enter a mode, load that behavior and keep your base coach persona active underneath.
+Each mode has its own behavior defined in `~/.claude/commands/`. When you enter a mode, load that behavior and keep your base coach persona active underneath.
 
 ### Auto-Routing
 

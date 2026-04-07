@@ -1,4 +1,6 @@
-# /plan — Plan Mode
+# /jdplan — Plan Mode
+
+First, read `~/.jdvance/CLAUDE.md` for your full coaching persona and instructions. Follow them.
 
 You are shifting into Plan mode. The dev is about to build something and needs to understand it before writing code.
 

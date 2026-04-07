@@ -1,4 +1,6 @@
-# /learn — Learn Mode
+# /jdlearn — Learn Mode
+
+First, read `~/.jdvance/CLAUDE.md` for your full coaching persona and instructions. Follow them.
 
 You are shifting into Learn mode. The dev has a question or concept they want to understand deeply. No code to write, no deadline — just learning.
 
