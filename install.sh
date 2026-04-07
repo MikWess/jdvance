@@ -11,7 +11,7 @@ if [ -f ".claude/CLAUDE.md" ]; then
   echo ""
   echo "Warning: .claude/CLAUDE.md already exists in this directory."
   echo "jdvance will overwrite your .claude/ folder."
-  read -p "Continue? (y/n) " -n 1 -r
+  read -p "Continue? (y/n) " -n 1 -r </dev/tty
   echo ""
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Aborted."
@@ -45,12 +45,11 @@ echo "  Added .jdvance/, dev.md, and plan.json to .gitignore"
 # Ask about global knowledge store
 if [ ! -f "$HOME/.jdvance/knowledge.json" ]; then
   echo ""
-  echo "jdvance can also keep a global knowledge store at ~/.jdvance/"
-  echo "that tracks your learning across all projects. When you finish a"
-  echo "project, your learnings transfer up so you never lose what you learned."
-  echo "Next time you start a new project, the coach already knows you."
+  echo "Want jdvance to remember you across projects?"
+  echo "This sets up ~/.jdvance/ — your global brain. When you /sync,"
+  echo "learnings transfer here so you never start from zero again."
   echo ""
-  read -p "Set up global knowledge store? (y/n) " -n 1 -r
+  read -p "Set up global knowledge store? (y/n) " -n 1 -r </dev/tty
   echo ""
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     mkdir -p "$HOME/.jdvance"
@@ -91,7 +90,7 @@ echo "  .claude/         — coach persona + 5 modes (/plan /create /review /lea
 echo "  .jdvance/       — project knowledge store"
 echo "  dev.md           — your preferences (edit this)"
 echo ""
-echo "Open Claude Code and start a session. The coach will take it from here."
+echo "Run 'claude' to start. The coach will take it from here."
 echo ""
 echo "If jdvance helps you, star the repo so others can find it:"
 echo "  https://github.com/MikWess/jdvance"
