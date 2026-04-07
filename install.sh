@@ -43,15 +43,25 @@ mkdir -p .jdvance
 cp "$TMPDIR/jdvance/.jdvance/knowledge.json" .jdvance/knowledge.json
 
 # Add jdvance files to .gitignore
-IGNORE_ENTRIES=(".jdvance/" "dev.md" "plan.json")
-if [ -f ".gitignore" ]; then
-  for entry in "${IGNORE_ENTRIES[@]}"; do
-    grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
-  done
+# Ask about gitignore
+echo ""
+echo -e "  ${ORANGE}${BOLD}Add jdvance to .gitignore?${RESET} ${DIM}(recommended — keeps coach files out of commits)${RESET}"
+echo ""
+read -p "  Add to .gitignore? (Y/n) " -n 1 -r </dev/tty
+echo ""
+if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+  IGNORE_ENTRIES=(".claude/" ".jdvance/" "dev.md" "plan.json")
+  if [ -f ".gitignore" ]; then
+    for entry in "${IGNORE_ENTRIES[@]}"; do
+      grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
+    done
+  else
+    printf '%s\n' "${IGNORE_ENTRIES[@]}" > .gitignore
+  fi
+  echo -e "  ${GREEN}+${RESET} Added .claude/, .jdvance/, dev.md, and plan.json to .gitignore"
 else
-  printf '%s\n' "${IGNORE_ENTRIES[@]}" > .gitignore
+  echo -e "  ${DIM}Skipped. jdvance files will be visible to git.${RESET}"
 fi
-echo -e "  ${GREEN}+${RESET} Added .jdvance/, dev.md, and plan.json to .gitignore"
 
 # Ask about global knowledge store
 if [ ! -f "$HOME/.jdvance/knowledge.json" ]; then
