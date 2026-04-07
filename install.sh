@@ -15,7 +15,25 @@ echo ""
 echo -e "${ORANGE}${BOLD}  J.D. VANCE${RESET}"
 echo -e "${DIM}  Junior Dev — Driven Via Agentic Native Claude Education${RESET}"
 echo ""
-echo -e "  Installing globally..."
+echo -e "  This will install the following to your machine:"
+echo ""
+echo -e "  ${BOLD}~/.claude/commands/${RESET}"
+echo -e "    6 slash commands: /jdvance /jdplan /jdcreate /jdreview /jdlearn /jdsync"
+echo ""
+echo -e "  ${BOLD}~/.jdvance/${RESET}"
+echo -e "    Coach persona, teaching skills, and a global knowledge store"
+echo -e "    ${DIM}(tracks your concept mastery across all projects)${RESET}"
+echo ""
+echo -e "  ${DIM}Nothing is installed in any project directory."
+echo -e "  Nothing touches your existing .claude/ config."
+echo -e "  To uninstall: rm -rf ~/.jdvance ~/.claude/commands/jd*.md${RESET}"
+echo ""
+read -p "  Install? (Y/n) " -n 1 -r </dev/tty
+echo ""
+if [[ $REPLY =~ ^[Nn]$ ]]; then
+  echo "  Aborted."
+  exit 0
+fi
 echo ""
 
 # Clone to temp dir
