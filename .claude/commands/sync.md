@@ -1,86 +1,66 @@
-# /sync — Sync & Clean Up
+# /sync — Save Your Learnings
 
-You are running a knowledge sync. This transfers learnings from the current tier up to the tier above, then cleans up.
+You are running a knowledge sync. This pushes learnings upward so nothing is lost.
 
-## How It Works
+## `/sync` (default) — Save, don't delete
 
-### PR/Task → Project Sync (default)
+Push all learnings up to root. Nothing gets deleted.
 
-When the dev runs `/sync` with an active `plan.json`:
+### Step 1: Task → Project (if plan.json exists)
 
-1. Read `plan.json` — identify all concepts that were encountered, leveled up, or had misconceptions cleared during this task.
-2. Read `.jdvance/knowledge.json` — the project-level store.
-3. **Transfer up**: For each concept in the task that showed a mastery change:
-   - If the concept exists at project level, update it to the higher level (never downgrade)
-   - If the concept is new, add it to project level
-   - Carry over `misconceptions_cleared` — these are always valuable
-   - Carry over relevant `notes`
-4. Show the dev what's being transferred:
-   ```
-   Syncing task → project:
-   - MCP tool registration: L1 → L2
-   - Zod schema validation: new (L1)
-   - Misconception cleared: "thought MCP servers need HTTP"
-   
-   Save to project knowledge? (y/n)
-   ```
-5. On confirmation, update `.jdvance/knowledge.json` and delete `plan.json`.
+1. Read `plan.json` — identify concepts encountered, leveled up, or with misconceptions cleared.
+2. Read `.jdvance/knowledge.json`.
+3. Transfer up:
+   - If the concept exists at project level, update to the higher level (never downgrade)
+   - If the concept is new, add it
+   - Carry over `misconceptions_cleared` and relevant `notes`
 
-### Project → Root Sync
+### Step 2: Project → Root
 
-When the dev runs `/sync` and there's no `plan.json` (or they use `/sync --project`):
-
-1. Read `.jdvance/knowledge.json` — the project-level store.
-2. Read `~/.jdvance/knowledge.json` — the root-level store.
-3. **Distill and transfer**: Only transfer concepts that are:
-   - Transferable beyond this project (e.g., "understands async/await" yes, "knows where the auth middleware lives in this codebase" no)
+1. Read `.jdvance/knowledge.json`.
+2. Read `~/.jdvance/knowledge.json`.
+3. Distill and transfer — only concepts that are:
+   - Transferable beyond this project ("understands async/await" yes, "knows where the auth middleware lives" no)
    - At a higher level than root currently has
-   - New concepts that are generally applicable
+   - New and generally applicable
 4. Show the dev what's being transferred:
    ```
-   Syncing project → root:
-   - async/await: L2 → L3 (was L2 at root)
+   Syncing learnings to root:
+   - async/await: L2 → L3
    - database transactions: new (L2)
-   - Dropping: "project auth middleware" (project-specific)
-   
-   Save to root knowledge? (y/n)
+   - Skipping: "project auth middleware" (project-specific)
+
+   Save to root knowledge?
    ```
 5. On confirmation, update `~/.jdvance/knowledge.json`.
-6. Ask: "Want to remove jdvance from this project? All your learnings are saved to root."
-7. If yes, remove `.jdvance/`, `.claude/`, `dev.md`, and `plan.json` from the project.
 
-### `/sync --all`
+### Merge Rules
 
-Does both in sequence: PR → project, then project → root.
+- Higher level wins (project L3 + root L2 = root becomes L3)
+- Never downgrade during sync
+- Combine notes and `misconceptions_cleared` from both levels
 
-### `/sync --keep`
+### What Gets Transferred vs Dropped
 
-Syncs up but does NOT delete anything at the current level. For when you want to save progress but you're not done yet.
+**Always transfer:** concept level promotions, misconceptions cleared, new concepts at L1+, notes with understanding nuances.
 
-## What Gets Transferred vs Dropped
+**Never transfer to root:** project-specific knowledge (file locations, architecture, conventions), L0 concepts, unaddressed gaps.
 
-**Always transfer:**
-- Concept level promotions
-- Misconceptions cleared
-- New concepts at L1+
-- Notes that capture understanding nuances
+## `/sync --nuke` — Save and remove
 
-**Never transfer to root:**
-- Project-specific knowledge (file locations, codebase architecture, team conventions)
-- L0 concepts (just encountered, not yet understood)
-- Gaps that were never addressed
+Same sync as above, then remove all jdvance files from the project:
+- `.jdvance/`
+- `.claude/`
+- `dev.md`
+- `plan.json`
 
-**Merge rules:**
-- Higher level wins (if project has L3 and root has L2, root becomes L3)
-- Never downgrade a level during sync
-- Combine notes from both levels
-- Combine misconceptions_cleared arrays
+Before nuking, confirm: "All learnings are saved to root. Remove jdvance from this project?"
 
 ## Nudging Toward Sync
 
-The coach should nudge toward `/sync` at natural moments:
-- PR merged or task completed → "Nice work. Want to `/sync` your learnings?"
-- Dev says "I'm done with this project" → "Before you go — `/sync` will save what you learned to your global knowledge."
-- Dev hasn't synced in a while and has significant learning → one gentle nudge
+Nudge at natural moments:
+- Task completed → "Nice work. Want to `/sync` your learnings?"
+- Dev says "I'm done with this project" → "Before you go — `/sync --nuke` will save what you learned and clean up."
+- Significant learning hasn't been synced in a while → one gentle nudge
 
 $ARGUMENTS
