@@ -116,7 +116,7 @@ echo -e "  ${ORANGE}.jdvance/${RESET}        coach persona, modes, knowledge sto
 echo -e "  ${ORANGE}dev.md${RESET}           your preferences ${DIM}(edit this)${RESET}"
 echo ""
 echo -e "  Type ${BOLD}/jdvance${RESET} in Claude Code to activate the coach."
-echo -e "  Modes: ${BOLD}/plan${RESET}  ${BOLD}/create${RESET}  ${BOLD}/review${RESET}  ${BOLD}/learn${RESET}  ${BOLD}/sync${RESET}"
+echo -e "  Then just say: ${BOLD}plan${RESET}  ${BOLD}create${RESET}  ${BOLD}review${RESET}  ${BOLD}learn${RESET}  ${BOLD}sync${RESET}"
 echo ""
 echo -e "  ${DIM}If this helps you, star the repo so others can find it:${RESET}"
 echo -e "  ${ORANGE}https://github.com/MikWess/jdvance${RESET}"

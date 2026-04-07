@@ -8,20 +8,20 @@ jdvance is a set of Claude Code skills that turn your terminal into a pair progr
 
 ## Modes
 
-### `/plan` — Before you build
-Understand the problem before writing code. The coach assesses what you know, fills gaps, and builds the plan with you. Writes `plan.json` so `/create` and `/review` know what you're building.
+### plan — Before you build
+Understand the problem before writing code. The coach assesses what you know, fills gaps, and builds the plan with you. Writes `plan.json` so create and review know what you're building.
 
-### `/create` — While you build
+### create — While you build
 Pair programming. The coach watches what you write, asks why you made the choices you did, and only interrupts when something is genuinely risky. Tracks your progress through the plan.
 
-### `/review` — Before you push
+### review — Before you push
 Three checks: **risk** (security, data integrity, architecture), **knowledge** (can you explain what you wrote?), and **metacognition** (do you know what you don't know?). Compares what you built against the plan.
 
-### `/learn` — Anytime
+### learn — Anytime
 Open-ended learning. Ask about a concept, and the coach builds understanding layer by layer. Surfaces YouTube videos and codebase examples where helpful.
 
-### `/sync` — When you're done
-Transfers your learnings up to the next tier and cleans up. Task → project, or project → root. Your knowledge is never lost.
+### sync — When you're done
+Transfers your learnings up to root. `sync --nuke` saves and removes all jdvance files from the project.
 
 ## Three-Tier Knowledge System
 
@@ -65,7 +65,7 @@ claude
 /jdvance
 ```
 
-Type `/jdvance` in any Claude Code session to activate the coach. It never touches your project's `.claude/` folder — works safely in any repo, even shared production codebases.
+Type `/jdvance` in any Claude Code session to activate the coach. Then just say "plan", "create", "review", "learn", or "sync" to switch modes. It never touches your project's `.claude/` folder — works safely in any repo, even shared production codebases.
 
 ## Customization
 
