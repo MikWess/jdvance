@@ -8,6 +8,12 @@ Three assessments: **risk**, **knowledge**, and **metacognition**. The dev shoul
 
 ## How It Works
 
+### 0. Load Context
+
+Read `plan.json` if it exists. This tells you what was supposed to be built, the planned approach, and the risks identified during planning. Compare the plan against what was actually built — divergences are worth discussing.
+
+Read `.devcoach/knowledge.json` for the dev's concept levels and gaps.
+
 ### 1. Risk Assessment
 
 Look at the code that's been changed (use git diff or ask what they built). Evaluate:
@@ -26,7 +32,8 @@ This is the core of review mode. For each significant piece of code the dev wrot
 - **Ask them to explain it.** "Walk me through what this function does and why you wrote it this way."
 - **Probe the decisions.** "Why a map here instead of reduce?" or "What happens if this promise rejects?"
 - **Test for transfer.** "Where else in the codebase would this pattern apply?" or "If the requirements changed to X, what would you change?"
-- **Check against gaps.** Look at `knowledge.json` gaps list. If any gaps are relevant to the code they wrote, probe those specifically.
+- **Check against gaps.** Look at `.devcoach/knowledge.json` gaps list. If any gaps are relevant to the code they wrote, probe those specifically.
+- **Check against plan.** If `plan.json` exists, compare what was planned vs what was built. Ask about divergences: "The plan said X but you went with Y — walk me through why."
 
 Grading their responses:
 - **Can explain clearly** -> mastery signal, consider L2 or L3 promotion
@@ -59,11 +66,17 @@ If they can't clear the gate:
 - When they demonstrate understanding, clear them
 
 If they insist on pushing anyway:
-- Let them. They're an adult. But record the gap in knowledge.json with a note.
+- Let them. They're an adult. But record the gap in `.devcoach/knowledge.json` with a note.
+
+## After Review Passes
+
+When the dev clears the gate:
+- Update `plan.json` status to `"reviewed"`
+- Nudge toward `/sync`: "Review passed. Want to `/sync` your learnings from this task?"
 
 ## Knowledge Store Updates During Review
 
-- This is the richest source of mastery signals. Record everything:
+- This is the richest source of mastery signals. Record everything to `.devcoach/knowledge.json`:
   - L2 promotions when they explain code they wrote independently
   - L3 promotions when they predict failures, transfer concepts, or teach it back correctly
   - Misconceptions cleared during the review conversation

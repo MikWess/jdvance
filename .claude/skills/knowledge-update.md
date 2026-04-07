@@ -1,6 +1,16 @@
 # Knowledge Update Skill
 
-This skill governs when and how to update `knowledge.json`. All four modes depend on this.
+This skill governs when and how to update the knowledge stores. All five modes depend on this.
+
+## The Three Tiers
+
+Knowledge lives at three levels:
+
+- **`plan.json`** (PR/task level) — written by `/plan`, tracks the current task. Disposable.
+- **`.devcoach/knowledge.json`** (project level) — tracks concepts within this project. Updated during sessions.
+- **`~/.devcoach/knowledge.json`** (root level) — tracks concepts across all projects. Updated only via `/sync`.
+
+During normal sessions, you read all three but only write to project level. Root is updated exclusively through `/sync`.
 
 ## When to Update
 

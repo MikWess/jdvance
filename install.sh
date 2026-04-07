@@ -23,28 +23,65 @@ fi
 TMPDIR=$(mktemp -d)
 git clone --quiet https://github.com/MikWess/devcoach.git "$TMPDIR/devcoach"
 
-# Copy everything
+# Copy coach files
 cp -r "$TMPDIR/devcoach/.claude" .
 cp "$TMPDIR/devcoach/dev.md" .
-cp "$TMPDIR/devcoach/knowledge.json" .
 
-# Clean up
+# Create project-level knowledge store
+mkdir -p .devcoach
+cp "$TMPDIR/devcoach/knowledge.json" .devcoach/knowledge.json
+
+# Clean up temp
 rm -rf "$TMPDIR"
 
-# Add devcoach files to .gitignore if not already there
+# Add devcoach files to .gitignore
+IGNORE_ENTRIES=(".devcoach/" "dev.md" "plan.json")
 if [ -f ".gitignore" ]; then
-  grep -qxF 'knowledge.json' .gitignore || echo 'knowledge.json' >> .gitignore
-  grep -qxF 'dev.md' .gitignore || echo 'dev.md' >> .gitignore
+  for entry in "${IGNORE_ENTRIES[@]}"; do
+    grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
+  done
 else
-  printf 'knowledge.json\ndev.md\n' > .gitignore
+  printf '%s\n' "${IGNORE_ENTRIES[@]}" > .gitignore
 fi
-echo "  Added knowledge.json and dev.md to .gitignore"
+echo "  Added .devcoach/, dev.md, and plan.json to .gitignore"
+
+# Ask about global knowledge store
+if [ ! -f "$HOME/.devcoach/knowledge.json" ]; then
+  echo ""
+  echo "devcoach can also keep a global knowledge store at ~/.devcoach/"
+  echo "that tracks your learning across all projects. When you finish a"
+  echo "project, your learnings transfer up so you never lose what you learned."
+  echo "Next time you start a new project, the coach already knows you."
+  echo ""
+  read -p "Set up global knowledge store? (y/n) " -n 1 -r
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    mkdir -p "$HOME/.devcoach"
+    cat > "$HOME/.devcoach/knowledge.json" << 'ENDJSON'
+{
+  "dev_profile": {
+    "name": "",
+    "stack": [],
+    "started": "",
+    "projects_completed": []
+  },
+  "concepts": [],
+  "gaps": []
+}
+ENDJSON
+    echo "  Created ~/.devcoach/knowledge.json"
+  else
+    echo "  Skipped. You can set this up later by running the installer again."
+  fi
+else
+  echo "  Global knowledge store found at ~/.devcoach/"
+fi
 
 echo ""
 echo "devcoach installed. You now have:"
-echo "  .claude/     — coach persona + 4 modes (/plan /create /review /learn)"
-echo "  dev.md       — your preferences (edit this)"
-echo "  knowledge.json — your concept store (auto-updated)"
+echo "  .claude/         — coach persona + 5 modes (/plan /create /review /learn /sync)"
+echo "  .devcoach/       — project knowledge store"
+echo "  dev.md           — your preferences (edit this)"
 echo ""
 echo "Open Claude Code and start a session. The coach will take it from here."
 echo ""

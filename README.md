@@ -1,30 +1,47 @@
 # devcoach
 
-A senior dev in your terminal. Claude Code skills that coach junior devs through planning, building, reviewing, and learning — backed by a persistent knowledge store that tracks what you understand and how deeply.
+A senior dev in your terminal. Claude Code skills that coach junior devs through planning, building, reviewing, and learning — backed by a three-tier knowledge system that tracks what you understand and grows with you over time.
 
 ## What is this?
 
 devcoach is a set of Claude Code skills that turn your terminal into a pair programming session with a patient, demanding senior developer. It doesn't write code for you — it makes sure you understand everything you're building, flags risks you haven't thought about, and grows with you over time.
 
-The system tracks your concept mastery across sessions using a local `knowledge.json` file. Every concept you encounter gets a mastery level (L0–L3), and the coach adapts based on what you know and what you don't.
-
 ## Modes
 
 ### `/plan` — Before you build
-Understand the problem before writing code. The coach assesses what you know, fills gaps with targeted questions and resources, and builds the plan collaboratively. You shouldn't start coding until you can explain the approach yourself.
+Understand the problem before writing code. The coach assesses what you know, fills gaps, and builds the plan with you. Writes `plan.json` so `/create` and `/review` know what you're building.
 
 ### `/create` — While you build
-Pair programming. The coach watches what you write, asks why you made the choices you did, and only interrupts when something is genuinely risky. The goal: you understand everything you create, independent from the AI.
+Pair programming. The coach watches what you write, asks why you made the choices you did, and only interrupts when something is genuinely risky. Tracks your progress through the plan.
 
 ### `/review` — Before you push
-Three checks: **risk** (security, data integrity, architecture), **knowledge** (can you explain what you wrote?), and **metacognition** (do you know what you don't know?). Won't let you push until you demonstrate understanding.
+Three checks: **risk** (security, data integrity, architecture), **knowledge** (can you explain what you wrote?), and **metacognition** (do you know what you don't know?). Compares what you built against the plan.
 
 ### `/learn` — Anytime
-Open-ended learning. Ask about a concept, and the coach builds understanding layer by layer — what it is, why it exists, how it works, when to use it, what breaks. Surfaces YouTube videos and codebase examples where helpful.
+Open-ended learning. Ask about a concept, and the coach builds understanding layer by layer. Surfaces YouTube videos and codebase examples where helpful.
 
-## The Knowledge Store
+### `/sync` — When you're done
+Transfers your learnings up to the next tier and cleans up. Task → project, or project → root. Your knowledge is never lost.
 
-`knowledge.json` tracks every concept you encounter:
+## Three-Tier Knowledge System
+
+Knowledge lives at three levels, and insights flow upward:
+
+```
+~/.devcoach/knowledge.json         ← ROOT: follows you across all projects
+project/.devcoach/knowledge.json   ← PROJECT: specific to this codebase  
+project/plan.json                  ← TASK: what you're building right now
+```
+
+**Task level** (`plan.json`) — written during `/plan`, tracks your current task. Steps, risks, concepts involved. Disposable after the work is done.
+
+**Project level** (`.devcoach/knowledge.json`) — tracks your understanding within this project. Updated automatically during sessions.
+
+**Root level** (`~/.devcoach/knowledge.json`) — your global brain. Persists across all projects. Only updated via `/sync` when you finish a project.
+
+When you `/sync`, learnings transfer up and the current tier cleans up. When you start a new project, the coach reads your root knowledge and already knows you.
+
+### Mastery Levels
 
 | Level | Name | Meaning |
 |-------|------|---------|
@@ -32,8 +49,6 @@ Open-ended learning. Ask about a concept, and the coach builds understanding lay
 | L1 | Exposed | You engaged with it — asked questions, restated it |
 | L2 | Applied | You reached for it correctly on your own |
 | L3 | Internalized | You can explain it, predict failures, transfer it to new contexts |
-
-The store also tracks misconceptions you've cleared, gaps you haven't addressed yet, and notes about the nuances of your understanding. It updates automatically during sessions and you can edit it directly anytime.
 
 ## Setup
 
@@ -43,7 +58,7 @@ One command from inside any project:
 curl -sL https://raw.githubusercontent.com/MikWess/devcoach/main/install.sh | bash
 ```
 
-That's it. It drops the coach files into your project. Then:
+That's it. It drops the coach files into your project and asks if you want to set up a global knowledge store. Then:
 
 ```bash
 cd your-project  # important: be inside the project directory
@@ -78,21 +93,35 @@ Everything is editable. The skill files in `.claude/commands/` and `.claude/skil
 ## File Structure
 
 ```
-.claude/
-  CLAUDE.md              ← always-on coach persona
-  commands/
-    plan.md              ← /plan mode
-    create.md            ← /create mode
-    review.md            ← /review mode
-    learn.md             ← /learn mode
-  skills/
-    knowledge-update.md  ← when/how the knowledge store updates
-    socratic-method.md   ← teaching by questioning
-    youtube-search.md    ← surfacing video resources
+~/.devcoach/
+  knowledge.json           ← root-level knowledge (global, optional)
 
-dev.md                   ← your personal preferences
-knowledge.json           ← your concept mastery store
+project/
+  .claude/
+    CLAUDE.md              ← always-on coach persona
+    commands/
+      plan.md              ← /plan mode
+      create.md            ← /create mode
+      review.md            ← /review mode
+      learn.md             ← /learn mode
+      sync.md              ← /sync — transfer & clean up
+    skills/
+      knowledge-update.md  ← when/how knowledge stores update
+      socratic-method.md   ← teaching by questioning
+      youtube-search.md    ← surfacing video resources
+  .devcoach/
+    knowledge.json         ← project-level knowledge
+  dev.md                   ← your personal preferences
+  plan.json                ← current task plan (auto-generated)
 ```
+
+## Uninstall
+
+From inside a project:
+- `/sync` to save your learnings to root, then it removes all devcoach files
+- Or manually: `rm -rf .claude .devcoach dev.md plan.json`
+
+To remove the global store: `rm -rf ~/.devcoach`
 
 ## Philosophy
 
