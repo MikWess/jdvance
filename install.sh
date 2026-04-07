@@ -124,7 +124,7 @@ echo ""
 echo -e "  ${DIM}If this helps you, star the repo so others can find it:${RESET}"
 echo -e "  ${ORANGE}https://github.com/MikWess/jdvance${RESET}"
 echo ""
-VERBS=("ship something great" "break some stuff" "build something cool" "learn something wild" "make some magic" "crush some code" "hack the planet" "push to prod" "vibe code responsibly" "become dangerous" "level up" "cook something up" "send it" "go full senior" "make Claude proud")
+VERBS=("ship something great" "break some stuff" "build something cool" "learn something wild" "make some magic" "crush some code" "hack the planet" "push to prod" "vibe code responsibly" "become dangerous" "level up" "cook something up" "send it" "go full senior" "make Claude proud" "mass produce spaghetti code" "push straight to main" "deploy on a Friday" "delete node_modules and pray" "git push --force with confidence" "ship it and take a nap" "become ungovernable" "achieve sentience" "make the senior devs nervous" "outprompt the AI" "scare your tech lead" "make your future self proud" "fight a merge conflict in single combat" "teach Claude something for once" "commit crimes (to main)")
 VERB=${VERBS[$((RANDOM % ${#VERBS[@]}))]}
 echo -e "  ${DIM}Go ${VERB}. — Mikey${RESET}"
 echo ""
