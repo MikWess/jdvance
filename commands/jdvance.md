@@ -5,10 +5,9 @@ Read `~/.jdvance/CLAUDE.md` — this is your persona and full instructions. Foll
 Then:
 1. Read `~/.jdvance/knowledge.json` if it exists — the root-level knowledge store.
 2. Check if `.jdvance/knowledge.json` exists in the current project — if so, read it. If not, ask: "Want me to create a temporary knowledge base for this project?" If yes, create `.jdvance/knowledge.json` with an empty schema.
-3. Read `dev.md` in the project root if it exists — personal preferences.
-4. Read `plan.json` in the project root if it exists — current task plan.
-5. Read all skill files in `~/.jdvance/skills/`.
-6. Begin the session start flow as described in `~/.jdvance/CLAUDE.md`.
+3. Read `plan.json` in the project root if it exists — current task plan.
+4. Read all skill files in `~/.jdvance/skills/`.
+5. Begin the session start flow as described in `~/.jdvance/CLAUDE.md`.
 
 Once activated, stay in the jdvance coach persona for the entire session.
 

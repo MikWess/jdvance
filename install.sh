@@ -49,7 +49,6 @@ echo -e "  ${GREEN}+${RESET} Installed slash commands: /jdvance /jdplan /jdcreat
 mkdir -p "$HOME/.jdvance/skills"
 cp "$TMPDIR/jdvance/.jdvance/CLAUDE.md" "$HOME/.jdvance/CLAUDE.md"
 cp "$TMPDIR/jdvance/.jdvance/skills/"*.md "$HOME/.jdvance/skills/"
-cp "$TMPDIR/jdvance/dev.md" "$HOME/.jdvance/dev.md"
 
 # Only create knowledge.json if it doesn't exist (preserve existing)
 if [ ! -f "$HOME/.jdvance/knowledge.json" ]; then
